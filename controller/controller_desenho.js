@@ -12,7 +12,7 @@ const  getListarDesenhos = async function(){
     if(dadosDesenho) {
 
         desenhoJSON.desenho = dadosDesenho
-        desenhoJSON.qauntidade = dadosDesenho.length
+        desenhoJSON.quantidade = dadosDesenho.length
         desenhoJSON.status_code = 200
 
         return desenhoJSON
@@ -22,8 +22,33 @@ const  getListarDesenhos = async function(){
 
 }
 
+// buscar pelo id 
+const getListarDesenho = async function(id) {
+    let idDesennho = id
+
+    let desenhoJSON = {}
+
+    if(idDesennho == '' || idDesennho == undefined || isNaN(idDesennho)) {
+        return message.ERROR_INVALID_ID
+    }else {
+        let dadosdesenho = await desenhoDAO.selectALLDesenhobyId(idDesennho)
+
+        if(dadosdesenho) {
+            if(dadosAtor.length > 0){
+                desenhoJSON.desenho = dadosdesenho
+                desenhoJSON.status_code = 200
+
+                return desenhoJSON
+            }else
+            return message.ERROR_NOT_FOUND
+        }else {
+            return message.ERRO_INTERNAL_SERVER_DB
+        }
+    }
+}
 
 
 module.exports = {
-    getListarDesenhos
+    getListarDesenhos,
+    getListarDesenho
 }
