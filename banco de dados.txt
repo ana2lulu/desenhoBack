@@ -1,0 +1,104 @@
+create database desenho;
+
+drop database desenho;
+
+use desenho;
+
+
+create table tbl_dublador(
+id_dublador int not null primary key auto_increment,
+nome VARCHAR(50),
+biografia VARCHAR(500),
+imagem VARCHAR(1500) NOT NULL
+
+);
+
+INSERT INTO tbl_dublador(nome, biografia, imagem) 
+VALUES
+(
+'Samira Fernandes',
+'Cicera Samira Fernandes Rolim (Assaré, 25 de maio de 1984) é uma atriz, dubladora, locutora e diretora de dublagem brasileira. Começou a dublar aos 18 anos, e é casada com o dublador Felipe Zilse.',
+'https://static.wikia.nocookie.net/dublagem/images/a/a8/Samira_Fernandes_%28Dubladora%29.jpg/revision/latest?cb=20230727201849&path-prefix=pt-br'
+),
+(
+'Luisa Palomanes',
+'Luisa Palomanes Pontes (Rio de Janeiro, 13 de agosto de 1986) é uma atriz e dubladora brasileira. É irmã da também dubladora Helena Palomanes.',
+'https://static.wikia.nocookie.net/dublagempedia/images/e/ee/Luisa_Palomanes.jpg/revision/latest?cb=20191002180204&path-prefix=pt-br'
+),
+(
+'Dwayne Johnson',
+'O destaque nas telonas foi tanto que ele teve que procurar por um nome mais condisente com a carreira de ator, passando a responder por Dwayne Johnson',
+'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJYIpe1NAJI16PXDkZTt8tiebkI2dDCn4XV7djOeWVkg&s'
+);
+
+
+create table tbl_personas(
+id_personas int not null primary key auto_increment,
+nome VARCHAR(50),
+biografia VARCHAR(500),
+imagem VARCHAR(1500) NOT NULL,
+id_dublador int not null,
+constraint fk_tbl_dublador foreign key (id_dublador) references tbl_dublador(id_dublador)
+);
+ 
+ INSERT INTO tbl_personas(nome, biografia, imagem,id_dublador) 
+ VALUES
+ (
+ 'Raven Quenn',
+ 'Raven Queen, ao contrário de sua mãe, não é má, o que traz na sua mente é ir contra toda a tradição e rejeitar o seu destino para criar seu próprio final feliz. É tecnicamente a fundadora dos Rebels pois foi a rejeição do seu destino que inspirou os outros',
+ 'https://pm1.aminoapps.com/6444/a46c6db37b3bcb6d251bf60247550d26f616a851_00.jpg',
+ 1
+ ),
+ (
+ 'Docinho',
+ 'Ela é muito protetora sobre suas irmãs. Já teve uma queda pelo Ace da Gangue Gangrena, mas descobriu que ele queria destruir suas irmãs, então acabou se voltando contra ele. Seu gosto musical é rock e heavy metal.',
+ 'https://i.pinimg.com/564x/96/1d/95/961d9524935e979b5ee8014270d4c693.jpg',
+ 2
+ ),
+ (
+'Moana',
+'Moana é uma personagem fictícia e o personagem-título que aparece no 56º filme de animação do Walt Disney Animation Studios de mesmo nome.',
+'https://lumiere-a.akamaihd.net/v1/images/g_moana_09_17699_064f5500_2f9ff275.jpeg?region=285,0,730,730',
+3
+);
+
+
+
+create table tbl_desenho(
+id_dublador int not null primary key auto_increment,
+nome varchar(100),
+data_lancamento date,
+sinopse varchar(500),
+foto_capa varchar(1500),
+id_personas int not null,
+constraint fk_tbl_personas foreign key (id_personas) references tbl_personas(id_personas)
+);
+
+
+INSERT INTO tbl_desenho(nome, data_lancamento, sinopse, foto_capa, id_personas) 
+VALUES
+(
+'EVER AFTER HIGH',
+'2013-07-20',
+'Os filhos de personagens de contos de fadas estudam em uma escola dividida entre os que acreditam em finais felizes e aqueles que querem escrever sua própria história.',
+'https://i.ytimg.com/vi/ObczDg_e3sM/maxresdefault.jpg', 
+1
+),
+(
+'The Powerpuff Girls',
+'1998-11-18',
+'As adoráveis irmãs Florzinha, Lindinha e Docinho dedicam a vida para lutar contra o crime e contra as forças do mal.',
+'https://static.wikia.nocookie.net/dublagem/images/e/e5/ThePowerpuffGirls.jpg/revision/latest?cb=20220313210639&path-prefix=pt-br',
+2
+),
+(
+'Moana',
+'2017-01-05',
+'Uma jovem parte em uma missão para salvar seu povo. Durante a jornada, Moana conhece o outrora poderoso semideus Maui, que a guia em sua busca para se tornar uma mestre em encontrar caminhos. Juntos, eles navegam pelo oceano em uma viagem incrível.',
+'https://m.media-amazon.com/images/I/71RgCh-pLWL._AC_UF1000,1000_QL80_.jpg',
+3
+);
+
+select * from tbl_personas where id_dublador = 4;
+select * from tbl_personas;
+select * from tbl_desenho;
