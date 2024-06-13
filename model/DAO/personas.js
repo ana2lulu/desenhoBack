@@ -5,9 +5,9 @@ const prisma = new PrismaClient();
 
 
 // listar todas as personas
-const selectAllpersonas = async function(){
+const getListarPersonas = async function(){
 
-    let sql = 'select * from tbl_personagem'
+    let sql = 'select * from tbl_personas'
 
     let rsPersonas = await prisma.$queryRawUnsafe(sql)
 
@@ -24,28 +24,22 @@ const insertPersonas = async function(dadosPersonas){
         let sql
 
         if(dadosPersonas){
-            sql = `insert into tbl_personagem (
+            sql = `insert into tbl_personas (
               id_dublador,
               nome,
-              data_lancamento,
-              sinopse,
-              foto_capa,
-              id_personagem
+              biografia,
+              imagem
             ) values(
 
                 '${dadosPersonas.id_dublador}',
                 '${dadosPersonas.nome}',
-                '${dadosPersonas.data_lancamento}',
-                '${dadosPersonas.sinopse}',
-                '${dadosPersonas.foto_capa}',
-                '${dadosPersonas.id_personagem}'
-
-
+                '${dadosPersonas.biografia}',
+                '${dadosPersonas.imagem}'
             )`
         } 
 
         let result = await prisma.$executeRawUnsafe(sql)
-
+console.log(result);
         if(result)
             return true
         else
@@ -58,7 +52,50 @@ const insertPersonas = async function(dadosPersonas){
     }
 }
 
+
+
+
+// buscar pelo id 
+const getBuscarIdPersonas = async function(id_personas) {
+    let sql = `select * from tbl_personas where id_personas = ${id_personas}`
+
+    try {
+        let rsPersonasid = await prisma.$queryRawUnsafe(sql)
+
+        if(rsPersonasid.length > 0)
+            return rsPersonasid
+        else
+            return false
+    } catch (error) {
+        console.error(error)
+        return false
+    }
+}
+
+
+//deletar personas
+
+const deletePersonas = async function(id_personas) {
+    let sql = `DELETE FROM tbl_personas WHERE id_personas = ?`;
+
+    try {
+        let result = await prisma.$executeRawUnsafe(sql, id_personas);
+
+        if (result) // Se a operação foi bem-sucedida
+            return true;
+        else
+            return false;
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
+}
+
+
 module.exports = {
-    selectAllpersonas,
-    insertPersonas
+   getListarPersonas,
+    insertPersonas,
+    getBuscarIdPersonas,
+    deletePersonas
+    
 }

@@ -5,7 +5,8 @@ const prisma = new PrismaClient();
 
 
 //listar todos os desenhos
-const selectALLDesenho = async function(){
+
+const getListarDesenho = async function(){
 
     let sql = 'select * from tbl_desenho'
 
@@ -18,21 +19,78 @@ const selectALLDesenho = async function(){
 
 }
 
-// buscar pelo id 
-const selectALLDesenhobyId = async function(id){
+//buscar id
+const getBuscarIdDesenho = async function(idDesenho) {
+    let sql = `select * from tbl_desenho where id = ${idDesenho}`;
 
-    let sql = `select * from tbl_desenho where id = ${id}`
+    try {
+        let rsDesenhoid = await prisma.$queryRawUnsafe(sql);
 
-    console.log(sql);
-    let rsDesenhoid = await prisma.$queryRawUnsafe(sql)
+        if (rsDesenhoid.length > 0)
+            return rsDesenhoid;
+        else
+            return false;
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
+};
 
-    if(rsDesenhoid.length > 0)
-        return rsDesenhoid
-    else(error)
+
+//inserir desenho
+const insertDesenho = async function(dadosDesenho){
+    try{
+
+        let sql
+
+        if(dadosDesenho){
+            sql = `insert into tbl_desenho (
+              id_personas,
+              nome,
+              sinopse,
+              foto_capa,
+              data_lancamento
+            ) values(
+            
+
+                '${dadosDesenho.id_personas}',
+                '${dadosDesenho.nome}',
+                '${dadosDesenho.sinopse}',
+                '${dadosDesenho.foto_capa}',
+                '${dadosDesenho.data_lancamento}'
+
+            )`
+        } 
+         console.log(sql)
+
+        let result = await prisma.$executeRawUnsafe(sql)
+console.log(result);
+        if(result)
+            return true
+        else
+            return false
+
+
+    } catch(erro){
+        console.log(erro)
         return false
+    }
 }
+
+
+//delete desenho
+
+
+
+
+
+
+
+
+
 module.exports ={
-    selectALLDesenho,
-    selectALLDesenhobyId
+    getListarDesenho,
+    getBuscarIdDesenho,
+    insertDesenho
 
 }
