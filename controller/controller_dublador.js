@@ -1,4 +1,5 @@
 const dubladorDAO = require('../model/DAO/dublador.js')
+const personasDAO = require('../model/DAO/personas.js')
 const message = require('../modulo/config.js')
 
 
@@ -95,10 +96,50 @@ const setInserirNovoDublador = async function(dadosDublador, contentType) {
     }
 }
 
+//delete
+
+const deleteDublador = async function(id) {
+    let idDelete = id
+ console.log(idDelete)
+    let deleteJSON ={}
+
+    if(idDelete == '' || idDelete == undefined || isNaN(idDelete)) {
+        return message.ERROR_INVALID_ID
+    } else {
+        let dadosDublador
+        let dadosPersonas
+        let idPersonas = await personasDAO.getBuscarPersonasIdDublador(idDelete)
+        if(idPersonas.length > 0){
+            let dadosDesenhos = await personasDAO.deleteDesenhoPersonas(idPersonas[0].id_personas)
+            if(dadosDesenhos){dadosPersonas= await dubladorDAO.deletePersonasDublador(idDelete)}
+            if(dadosPersonas){ 
+                dadosDublador = await dubladorDAO.deleteDublador(idDelete)}
+        }else{
+            dadosDublador = await dubladorDAO.deleteDublador(idDelete)
+        }
+       
+       
+
+        if(dadosDublador) {
+            deleteJSON.dublador = dadosDublador
+            deleteJSON.status_code = 200
+            return deleteJSON 
+        } else if(dadosDublador.length === 0) {
+            return message.ERROR_NOT_FOUND
+        } else {
+            return message.ERRO_INTERNAL_SERVER_DB
+        }
+    }
+}
+
+
+
+
 
 module.exports = {
     getlistarDublador,
     getBuscarIdDublador,
-    setInserirNovoDublador
+    setInserirNovoDublador,
+    deleteDublador
     
 }

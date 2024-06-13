@@ -80,17 +80,28 @@ console.log(result);
 
 //delete desenho
 
+const deletePersonasDesenho = async function(id_desenho) {
+    let sql = `DELETE FROM tbl_personas WHERE id_desenho = ${id_desenho}`;
 
+    try {
+        let result = await prisma.$executeRawUnsafe(sql);
 
-
-
-
+        if (result) // Se a operação foi bem-sucedida
+            return true;
+        else
+            return false;
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
+}
 
 
 
 module.exports ={
     getListarDesenho,
     getBuscarIdDesenho,
-    insertDesenho
+    insertDesenho,
+    deletePersonasDesenho
 
 }

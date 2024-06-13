@@ -23,25 +23,20 @@ const getListarDesenho = async function() {
 
 // Buscar pelo ID
 const getBuscarIdDesenho = async function(id) {
-    let idDesenho = id;
     let desenhoJSON = {};
 
-    if (idDesenho == '' || idDesenho == undefined || isNaN(idDesenho)) {
-        return { status_code: 400, mensagem: 'ID inválido' };
-    } else {
-        let dadosDesenho = await desenhoDAO.getBuscarIdDesenho(idDesenho);
+    let dadosDesenho = await desenhoDAO.getBuscarIdDesenho(id);
 
-        if (dadosDesenho && dadosDesenho.length > 0) {
-            desenhoJSON.desenho = dadosDesenho;
-            desenhoJSON.status_code = 200;
-            return desenhoJSON;
-        } else if (dadosDesenho.length === 0) {
-            return { status_code: 404, mensagem: 'Desenho não encontrado' };
-        } else {
-            return { status_code: 500, mensagem: 'Erro no servidor' };
-        }
+    if (dadosDesenho) {
+        desenhoJSON.desenho = dadosDesenho;
+        desenhoJSON.quantidade = dadosDesenho.length;
+        desenhoJSON.status_code = 200;
+
+        return desenhoJSON;
+    } else {
+        return { status_code: 404, mensagem: 'Nenhum desenho encontrado' };
     }
-};
+}
 
 
 
@@ -98,11 +93,35 @@ const setInserirNovoDesenho = async function(dadosDesenho, contentType) {
     }
 }
 
+//delete desenho
+
+const deleteDesenho = async function(id) {
+    let idDesenho = id
+    
+    let deleteJSON = {}
+
+    if(idDelete == '' || idDelete == undefined || isNaN(idDelete)) {
+        return message.ERROR_INVALID_ID
+    } else {
+        let dadosDesenho = await desenhoDAO.deleteDesenho(idDelete)
+
+        if(dadosDesenho && dadosDesenho.length > 0) {
+            desenhoJSON.desenho = dadosDesenho
+            desenhoJSON.status_code = 200
+            return desenhoJSON
+        } else if(dadosDesenho.length === 0) {
+            return message.ERROR_NOT_FOUND
+        } else {
+            return message.ERRO_INTERNAL_SERVER_DB
+        }
+    }
+}
 
 
 
 module.exports = {
     getListarDesenho,
     getBuscarIdDesenho,
-    setInserirNovoDesenho
+    setInserirNovoDesenho,
+    deleteDesenho
 }

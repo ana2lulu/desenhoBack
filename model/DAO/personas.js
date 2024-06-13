@@ -73,6 +73,23 @@ const getBuscarIdPersonas = async function(id_personas) {
 }
 
 
+//buscar dublador
+const getBuscarPersonasIdDublador = async function(id_dublador) {
+    let sql = `select * from tbl_personas where id_dublador = ${id_dublador}`
+
+    try {
+        let rsPersonasid = await prisma.$queryRawUnsafe(sql)
+
+        return rsPersonasid
+    } catch (error) {
+        console.log(error)
+        return false
+    }
+}
+
+
+
+
 //deletar personas
 
 const deletePersonas = async function(id_personas) {
@@ -92,10 +109,32 @@ const deletePersonas = async function(id_personas) {
 }
 
 
+
+const deleteDesenhoPersonas = async function(id_personas) {
+    console.log(id_personas)
+    let sql = `DELETE FROM tbl_desenho WHERE id_personas = ${id_personas}`;
+
+    try {
+        let result = await prisma.$executeRawUnsafe(sql);
+
+        if (result) // Se a operação foi bem-sucedida
+            return true;
+        else
+            return false;
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
+}
+
+
 module.exports = {
    getListarPersonas,
     insertPersonas,
     getBuscarIdPersonas,
-    deletePersonas
+    deleteDesenhoPersonas,
+    deletePersonas,
+    getBuscarPersonasIdDublador
+    
     
 }

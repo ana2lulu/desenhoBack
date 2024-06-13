@@ -73,6 +73,7 @@ console.log(result);
     }
 }
 
+
 const deleteDublador = async function(id) {
     let sql = `DELETE FROM tbl_dublador WHERE id_dublador = ?`;
 
@@ -89,11 +90,29 @@ const deleteDublador = async function(id) {
     }
 }
 
+const deletePersonasDublador = async function(id) {
+    let sql = `DELETE FROM tbl_personas where id_dublador = ?`;
+    try{
+        let result = await prisma.$executeRawUnsafe(sql, id);
+
+        
+        if (result) // Se a operação foi bem-sucedida
+            return true;
+        else
+            return false;
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
+}
+    
+
 
 
 module.exports = {
     getlistarDublador,
     getBuscarIdDublador,
     insertDublador,
+    deletePersonasDublador,
     deleteDublador
 }

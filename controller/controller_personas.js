@@ -96,6 +96,29 @@ const getBuscarIdPersonas= async function(id) {
 
 //delete persona
 
+const deletePersonas = async function(id) {
+    let idDelete = id
+
+    // Esse é o código da controller.persona:
+    let personasJSON = {}
+
+    if(idDelete == '' || idDelete == undefined || isNaN(idDelete)) {
+        return message.ERROR_INVALID_ID
+    } else {
+        let dadosDesenho = await personasDAO.deleteDesenhoPersonas(idDelete)
+        let dadosPersonas = await personasDAO.deletePersonas(idDelete)
+
+        if(dadosPersonas) {
+            personasJSON.personas = dadosPersonas
+            personasJSON.status_code = 200
+            return personasJSON
+        } else if(dadosPersonas.length === 0) {
+            return message.ERROR_NOT_FOUND
+        } else {
+            return message.ERRO_INTERNAL_SERVER_DB
+        }
+    }
+}
 
 
 
@@ -104,5 +127,6 @@ module.exports = {
     getListarPersonas,
     getBuscarIdPersonas,
     setInserirNovoPersonas,
+    deletePersonas
     
 }
